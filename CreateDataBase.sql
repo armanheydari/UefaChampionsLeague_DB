@@ -1,4 +1,4 @@
-CREATE DATABASE UCL;
+CREATE DATABASE UCL2;
 
 CREATE TABLE Country  (
     country_id  int IDENTITY(1, 1) NOT NULL,
@@ -93,10 +93,10 @@ CREATE TABLE Match  (
 	date date,
 	result nvarchar(10),
 	stadium_id int NOT NULL,
-	reffree_id int NOT NULL,
+	is_in_group bit default 1,
+	is_done bit default 0,
     PRIMARY KEY (match_id),
 	FOREIGN KEY (stadium_id) REFERENCES Stadium(stadium_id),
-	FOREIGN KEY (reffree_id) REFERENCES Reffree(reffree_id)
 );
 
 CREATE TABLE Report_by(
@@ -131,3 +131,12 @@ CREATE TABLE Goal  (
 	FOREIGN KEY (player_id) REFERENCES Player(player_id),
 	FOREIGN KEY (match_id) REFERENCES Match(match_id)
 );
+
+CREATE TABLE judge_by(
+    reffree_id INT not null,
+    match_id INT not null,	
+    FOREIGN KEY (reffree_id) REFERENCES Reffree(reffree_id),
+	FOREIGN KEY (match_id) REFERENCES Match(match_id)
+);
+
+

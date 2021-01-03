@@ -87,7 +87,8 @@ CREATE TABLE Player(
 );
 
 CREATE TABLE Match  (
-    match_id int IDENTITY(1, 1) NOT NULL,
+	match_id int IDENTITY(1, 1) NOT NULL,
+	teams nvarchar(20),
 	weather nvarchar(20),
 	time time(7),
 	date date,
@@ -115,7 +116,7 @@ CREATE TABLE Plays_in(
 	yellow_cards INT,
 	red_cards INT,
 	foals INT,
-	is_win VARCHAR(10) not null default 'equal',
+	is_win VARCHAR(10) not null default 'not started',
     FOREIGN KEY (team_id) REFERENCES Team(team_id),
 	FOREIGN KEY (match_id) REFERENCES Match(match_id)
 );
@@ -123,8 +124,8 @@ CREATE TABLE Plays_in(
 CREATE TABLE Goal  (
     goal_id int IDENTITY(1, 1) NOT NULL,
 	minute int ,
-	ispenalty bit NOT NULL,
-	is_own_goal bit NOT NULL,
+	ispenalty bit NOT NULL default 0,
+	is_own_goal bit NOT NULL default 0,
 	player_id int NOT NULL,
 	match_id int NOT NULL,
     PRIMARY KEY (goal_id),

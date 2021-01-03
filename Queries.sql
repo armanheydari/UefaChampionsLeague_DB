@@ -99,4 +99,69 @@ RETURN
 GO
 SELECT * FROM dbo.fn_suspendeds('barcelona-real')
 -------------------------------------------------------------------------------------
+		/*neveshtane liste reffree haye yek match*/
+GO									
+CREATE FUNCTION fn_Reffree_info(@match_teams nVARCHAR(20))
+RETURNS TABLE
+AS
+RETURN
+	SELECT Reffree.name
+	FROM  Reffree, Match ,judge_by
+	WHERE @match_teams = Match.teams
+	      and judge_by.reffree_id = Reffree.reffree_id and judge_by.match_id = Match.match_id
+GO
+SELECT * FROM fn_Reffree_info('barca-real')
+
+------------------------------------------------------------------------------------------------
+					/*neveshtane liste coachs be hamrah name team */
+select Team.name as team_name,Coach.name as coach_name,Coach.work_experience as coach_experience
+from Team,Coach
+where Team.coach_id = Coach.coach_id
+
+------------------------------------------------------------------------------------------------
+					/*neveshtane liste information haye commentor ha*/
+select Commentator.name,Commentator.language,Commentator.channel
+from Commentator
+
+------------------------------------------------------------------------------------------------
+					/*neveshtane liste tackle haye doroste har player bejoz goolkeeper*/
+select Player.name,Player.succesful_tackles,Team.name as team_name,player.shirt_number,Player.position
+from Player,Team
+where Player.team_id = Team.team_id and not Player.position = 'Goolkeeper'
+
+------------------------------------------------------------------------------------------------
+					/*neveshtane liste save haye har goolkeeper */
+select Player.name,Player.saves,Team.name as team_name,player.shirt_number,Player.position
+from Player,Team
+where Player.team_id = Team.team_id and  Player.position = 'Goolkeeper'
+
+------------------------------------------------------------------------------------------------
+					/*neveshtane liste player haye har country */
+select Country.name,count1 =count(Player.player_id)
+from Country,Player
+where Country.country_id = Player.country_id
+Group by Country.name
+
+------------------------------------------------------------------------------------------------
+						/*neveshtane liste name va score va group har team*/
+select Team.name,Team.score,Groups.name
+from Team,Groups
+Where Team.is_eliminated = 'False' and Team.group_id = Groups.group_id
+
+------------------------------------------------------------------------------------------------
+					/*ba dadan name yek team information team list mishavad*/
+GO									
+CREATE FUNCTION fn_Team_info(@match_teams nVARCHAR(20))
+RETURNS TABLE
+AS
+RETURN
+	SELECT Team.name,Team.score,Team.number_of_titles
+	FROM  Team
+	WHERE @match_teams = Team.name
+	 
+GO
+SELECT * FROM fn_Team_info('barca')
+------------------------------------------------------------------------------------------------
+
+
 
